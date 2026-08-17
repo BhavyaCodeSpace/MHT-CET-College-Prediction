@@ -1,2 +1,2 @@
 Here is the link for website:
-https://mht-cet-college-prediction-bhavya.streamlit.app/
+https://mht-cet-college-predictor-bhavya.streamlit.app/

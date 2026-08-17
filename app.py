@@ -414,6 +414,60 @@ def load_database():
 
 df = load_database()
 
+# ============================================================
+# CORRECT "OTHER" LOCATIONS USING DTE DISTRICT MAPPING
+# ============================================================
+
+LOCATION_MAPPING_FILE = os.path.join(
+    BASE_DIR,
+    "data",
+    "other_college_district_mapping.csv"
+)
+
+if os.path.exists(LOCATION_MAPPING_FILE):
+
+    location_mapping = pd.read_csv(
+        LOCATION_MAPPING_FILE,
+        dtype={"college_code": str}
+    )
+
+    # Make sure college codes match even if SQLite stores them differently
+    df["college_code"] = (
+        df["college_code"]
+        .astype(str)
+        .str.strip()
+    )
+
+    location_mapping["college_code"] = (
+        location_mapping["college_code"]
+        .astype(str)
+        .str.strip()
+    )
+
+    # Create college-code → district lookup
+    district_map = dict(
+        zip(
+            location_mapping["college_code"],
+            location_mapping["corrected_district"]
+        )
+    )
+
+    # IMPORTANT:
+    # Only replace locations currently marked "Other".
+    # All existing locations remain untouched.
+    other_mask = (
+        df["location"]
+        .astype(str)
+        .str.strip()
+        .str.lower()
+        == "other"
+    )
+
+    df.loc[other_mask, "location"] = (
+        df.loc[other_mask, "college_code"]
+        .map(district_map)
+        .fillna(df.loc[other_mask, "location"])
+    )
 
 if df.empty:
     st.error("Something went wrong while loading the predictor.")

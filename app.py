@@ -288,7 +288,7 @@ if os.path.exists(LOCATION_MAPPING_FILE):
     df.loc[other_mask, "location"] = df.loc[other_mask, "college_code"].map(district_map).fillna(df.loc[other_mask, "location"])
 
 if df.empty:
-    st.error("Something went wrong while loading the predictor database.")
+    st.error("Something went wrong while loading the predictor database[cite: 5].")
     st.stop()
 
 # Clean data
@@ -357,7 +357,7 @@ if not predict:
     )
     st.divider()
     st.subheader("Explore your options")
-    st.write("Use your percentile and preferences to find colleges that may be suitable based on previous CAP cutoff trends.")
+    st.write("Use your percentile and preferences to find colleges that may be suitable based on previous CAP cutoff trends[cite: 5].")
     st.stop()
 
 # Retrieve saved inputs
@@ -447,7 +447,7 @@ if results.empty:
 # DISPLAY TABLE (CLEAN & NON-OVERLAPPING)
 # ============================================================
 
-st.caption("Following results are based on the latest available CAP cutoff for each college.  A  '/'  means cutoff data was not available for that CAP round.")
+st.caption("Following results are based on the latest available CAP cutoff for each college[cite: 5].  A  '/'  means cutoff data was not available for that CAP round.")
 
 def format_cutoff(val):
     if val is None or pd.isna(val): return "/"
